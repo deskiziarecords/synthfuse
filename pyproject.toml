@@ -5,9 +5,22 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "synthfuse"
 version = "0.1.0"
-description = "Adaptive Complexity Regularization (ACR) via JAX Mixture of Experts"
+description = "Hybrid ML: JAX-accelerated SVR with Adaptive Complexity Regularization"
 readme = "README.md"
+authors = [{name = "Roberto Jimenezx", email = "tijuanapaint@gmail.com"}]
+license = {text = "MIT"}
 requires-python = ">=3.9"
+keywords = ["machine-learning", "jax", "scikit-learn", "hybrid-ml", "svr"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
@@ -20,4 +33,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "mypy"]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/yourusername/synthfuse"
+"Bug Tracker" = "https://github.com/yourusername/synthfuse/issues"
+
+[tool.setuptools.packages.find]
+include = ["synthfuse*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
