@@ -16,9 +16,7 @@ By utilizing **JAX** and `vmap`, Synthfuse trains a **Mixture of Experts** simul
 
 ## 📊 Performance
 
-
-
-In our benchmarks, Synthfuse ACR maintains a near-flat execution time as the number of experts ($K$) increases, whereas standard serial loops scale linearly.
+In our benchmarks, Synthfuse ACR maintains a near-flat execution time as the number of experts (K) increases, whereas standard serial loops scale linearly.
 
 | Number of Experts (K) | SK-Learn (Serial) | Synthfuse (JAX) | Speedup |
 | :--- | :--- | :--- | :--- |
@@ -28,22 +26,21 @@ In our benchmarks, Synthfuse ACR maintains a near-flat execution time as the num
 
 ## 🛠️ Installation
 
-
 Using `uv` (recommended):
+
 ```bash
 uv add synthfuse
+```
 
 Standard pip:
 
+```bash
 pip install synthfuse
-
-______
+```
 
 ## 💡 Quick Start
 
-```
-Python
-
+```python
 from synthfuse import MixtureOfSVRExperts
 import numpy as np
 
@@ -53,32 +50,34 @@ y = np.sin(X[:, 0]) + 0.1 * np.random.randn(1000)
 
 # Initialize and fit
 model = MixtureOfSVRExperts(
-    degree=3, 
-    lam_tree=0.5, 
+    degree=3,
+    lam_tree=0.5,
     epochs=500
 )
 model.fit(X, y)
 
 # Predict
 predictions = model.predict(X)
+```
 
-🧠 The Math: How ACR Works
+## 🧠 The Math: How ACR Works
 
 The loss function for each expert k is defined by:
-Lk​=C∑Lϵ​(y,y^​)+λ⋅(Ωtree​⋅∣∣wk​∣∣2)
+
+$$L_k = C\sum L_{\epsilon}(y, \hat{y}) + \lambda \cdot (\Omega_{tree} \cdot ||w_k||^2)$$
 
 Where:
 
-    Lϵ​ is the ϵ-insensitive hinge loss.
+* **$L_{\epsilon}$** is the ϵ-insensitive hinge loss.
+* **$\Omega_{tree}$** is the Complexity Map derived from the average leaf depth of a Random Forest.
+* Regions with deep leaves (high complexity) receive higher L² penalties, forcing the model to be smoother and less reactive to noise.
 
-    Ωtree​ is the Complexity Map derived from the average leaf depth of a Random Forest.
+## 📜 License
 
-    Regions with deep leaves (high complexity) receive higher L2​ penalties, forcing the model to be smoother and less reactive to noise.
+MIT License. See [LICENSE](LICENSE) for details.
 
-📜 License
+## ☕ Support
 
-**MIT License. See LICENSE for details.**
-      
-If you found this implementation usefull and you would like to boost some fuel for me to get a decent hardware for better upgrades you can (https://buymeacoffee.com/hipotermiah)
-          
+If you found this implementation useful and would like to support the project, consider buying me a coffee:
 
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/hipotermiah)
