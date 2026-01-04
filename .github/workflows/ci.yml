@@ -22,7 +22,7 @@ jobs:
           # Use 'version' for the uv tool, not python
           version: "latest"
           # Disable cache-dependency-glob if you haven't committed uv.lock yet
-          enable-cache: true
+          enable-cache: false
 
       - name: Set up Python
         run: uv python install ${{ matrix.python-version }}
