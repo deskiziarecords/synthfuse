@@ -2,54 +2,59 @@ import pytest
 import jax
 import jax.numpy as jnp
 import numpy as np
-from synthfuse import SynthfuseACR  # or whatever your main class is called
+from synthfuse import MixtureOfSVRExperts
 
 
 def test_import():
-    """Test that the package can be imported."""
-    assert SynthfuseACR is not None
+    """Test that MixtureOfSVRExperts can be imported."""
+    assert MixtureOfSVRExperts is not None
 
 
 def test_instantiation():
-    """Test that the model can be instantiated with default parameters."""
-    model = SynthfuseACR()
+    """Test model instantiation with valid parameters."""
+    model = MixtureOfSVRExperts(degree=2, lam_tree=0.1, epochs=10, n_experts=4)
     assert model is not None
 
 
-def test_fit_predict_shapes():
-    """Test that fit and predict return expected shapes."""
-    # Generate simple synthetic data
-    key = jax.random.PRNGKey(0)
-    X = jax.random.normal(key, (100, 4))  # 100 samples, 4 features
-    y = jnp.sum(X, axis=1) + 0.1 * jax.random.normal(key, (100,))  # linear + noise
+def test_fit_predict_numpy():
+    """Test fit/predict with NumPy arrays (scikit-learn compatibility)."""
+    X = np.random.randn(200, 3)
+    y = np.sin(X[:, 0]) + 0.1 * np.random.randn(200)
 
-    model = SynthfuseACR(n_experts=3, max_iter=10)  # small for speed
+    model = MixtureOfSVRExperts(degree=3, lam_tree=0.5, epochs=50, n_experts=8)
     model.fit(X, y)
     y_pred = model.predict(X)
 
     assert y_pred.shape == y.shape
-    assert jnp.issubdtype(y_pred.dtype, jnp.floating)
+    assert isinstance(y_pred, np.ndarray)
+
+
+def test_fit_predict_jax():
+    """Test fit/predict with JAX arrays."""
+    key = jax.random.PRNGKey(42)
+    X = jax.random.normal(key, (150, 4))
+    y = X[:, 0] ** 2 + 0.05 * jax.random.normal(key, (150,))
+
+    model = MixtureOfSVRExperts(degree=2, lam_tree=0.3, epochs=30, n_experts=4)
+    model.fit(X, y)
+    y_pred = model.predict(X)
+
+    assert y_pred.shape == y.shape
+    assert isinstance(y_pred, jnp.ndarray)
 
 
 def test_predict_before_fit_raises():
-    """Ensure predict() fails gracefully if fit() hasn't been called."""
-    model = SynthfuseACR()
-    X = jnp.ones((5, 3))
-    with pytest.raises(Exception):  # ideally a more specific error like NotFittedError
+    """Ensure predict() raises an error if fit() hasn't been called."""
+    model = MixtureOfSVRExperts()
+    X = np.ones((5, 2))
+    with pytest.raises(Exception, match="not fitted"):
         model.predict(X)
 
 
-def test_jax_array_input():
-    """Ensure the model works with JAX arrays (not just NumPy)."""
-    X_np = np.random.randn(50, 3)
-    y_np = np.sum(X_np, axis=1)
-
-    X_jax = jnp.array(X_np)
-    y_jax = jnp.array(y_np)
-
-    model = SynthfuseACR(n_experts=2, max_iter=5)
-    model.fit(X_jax, y_jax)
-    preds = model.predict(X_jax)
-
-    assert isinstance(preds, jnp.ndarray)
-    assert preds.shape == y_jax.shape
+def test_input_validation():
+    """Test that incompatible input shapes raise errors."""
+    model = MixtureOfSVRExperts()
+    X = np.random.randn(100, 3)
+    y = np.random.randn(99)  # mismatched length
+    with pytest.raises(ValueError):
+        model.fit(X, y)
