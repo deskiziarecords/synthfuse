@@ -1,18 +1,65 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "synthfuse"
-# ... metadata ...
+version = "0.1.0"
+description = "Algorithms with red-bull - Swiss knife Army for ML enhancements"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "deskiziarecords"}
+]
+
 dependencies = [
     "jax>=0.4.20",
     "optax>=0.1.7",
-    # other dependencies...
+    "scikit-learn>=1.0.0",
+    "numpy>=1.21.0",
 ]
 
 [project.optional-dependencies]
 # For CUDA 12.x (The modern standard)
 gpu-cuda12 = [
-    "jax[cuda12_pip]"
+    "jax[cuda12_pip]>=0.4.20"
 ]
 # For CUDA 11.x (Legacy/Older Enterprise servers)
 gpu-cuda11 = [
-    "jax[cuda11_pip]"
+    "jax[cuda11_pip]>=0.4.20"
 ]
+# For CPU-only (no GPU)
+cpu = [
+    "jax[cpu]>=0.4.20"
+]
+# For development and testing
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=3.0",
+    "black>=22.0",
+    "isort>=5.0",
+    "flake8>=4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/deskiziarecords/synthfuse"
+Documentation = "https://github.com/deskiziarecords/synthfuse"
+Repository = "https://github.com/deskiziarecords/synthfuse.git"
+Issues = "https://github.com/deskiziarecords/synthfuse/issues"
+
+[tool.setuptools]
+packages = ["synthfuse"]
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --tb=short"
