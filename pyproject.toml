@@ -1,55 +1,18 @@
-[build-system]
-requires = ["setuptools>=61", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "synthfuse"
-version = "0.1.0"
-description = "Hybrid ML: JAX-accelerated SVR with Adaptive Complexity Regularization"
-readme = "README.md"
-authors = [{name = "Roberto Jimenezx", email = "tijuanapaint@gmail.com"}]
-license = {text = "MIT"}
-requires-python = ">=3.9"
-keywords = ["machine-learning", "jax", "scikit-learn", "hybrid-ml", "svr"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
+# ... metadata ...
 dependencies = [
-    "numpy>=1.24",
-    "scipy>=1.10",
-    "scikit-learn>=1.3",
-    "jax[cpu]>=0.4.20", 
+    "jax>=0.4.20",
     "optax>=0.1.7",
-    "pandas",
-    "matplotlib",
-    "psutil"
+    # other dependencies...
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pytest>=7.0",
-    "ruff>=0.1.0",
-    "mypy>=1.0.0",
+# For CUDA 12.x (The modern standard)
+gpu-cuda12 = [
+    "jax[cuda12_pip]"
 ]
-
-[project.urls]
-"Homepage" = "https://github.com/yourusername/synthfuse"
-"Bug Tracker" = "https://github.com/yourusername/synthfuse/issues"
-
-[tool.setuptools.packages.find]
-include = ["synthfuse*"]
-
-[tool.ruff]
-line-length = 88
-target-version = "py39"
-
-[tool.mypy]
-python_version = "3.9"
-ignore_missing_imports = true
+# For CUDA 11.x (Legacy/Older Enterprise servers)
+gpu-cuda11 = [
+    "jax[cuda11_pip]"
+]
