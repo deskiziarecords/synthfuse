@@ -71,7 +71,30 @@ Where:
 * **$L_{\epsilon}$** is the ϵ-insensitive hinge loss.
 * **$\Omega_{tree}$** is the Complexity Map derived from the average leaf depth of a Random Forest.
 * Regions with deep leaves (high complexity) receive higher L² penalties, forcing the model to be smoother and less reactive to noise.
+## Retrain with synthfuse
+`Synthfuse retrain` implements a mathematical framework for improving neural network models by constructing optimal retraining paths in parameter space. Given an incumbent model θ* and a strictly superior model θ†, the library provides methods to find a new model θ‡ that dominates θ† while retaining desirable properties.
 
+## Key Features
+
+### Deterministic Retraining Paths
+- **WSFT** (Warm-Start Fine-Tuning): Geodesic with biased initial velocity
+- **KDT** (Knowledge-Distillation Transfer): Objective-space lifting with softened labels
+- **OTWI** (Optimal Transport Weight Interpolation): Measure-preserving parameter coupling
+- **FRR** (Functional Regularized Reset): NTK-regularized functional proximity
+
+### Diffuse Retraining Methods
+- **DBSD** (Diffusion Bridge with Superior-Drift): SDE-based diffusion bridges
+- **TIL** (Teacher-Injected Langevin): Controlled Langevin processes
+- **FDD** (Functional Diffusion Distillation): Hyperspherical diffusion on NTK manifold
+- **Schrödinger Bridge**: Optimal stochastic control formulation
+
+### Geometric Tools
+- Parameter manifold operations (tangent spaces, geodesics)
+- Optimal transport couplings (Wasserstein-2)
+- Neural Tangent Kernel computations
+- Fisher information geometry
+
+  
 ## 📜 License
 
 MIT License. See [LICENSE](LICENSE) for details.
